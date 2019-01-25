@@ -1,0 +1,26 @@
+---
+version: "3.7"
+services:
+  unit-tests:
+    image: graze/bats
+    environment:
+      - DOCKER_IMAGE_UNDER_TEST
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_BIN_PATH}:/usr/bin/docker
+      - ${HOST_PWD?Please specify the app directory from the host.}:/app
+    working_dir: /app
+    command:
+      - /app/tests
+  push-to-docker-hub:
+    image: alpine
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOST_PWD?Please specify the app directory from the host.}:/app
+    env_file: .env
+    entrypoint:
+      - sh
+      - "-c"
+      - "docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD} && \
+         docker tag ${DOCKER_IMAGE_TO_DEPLOY} ${TAG_TO_USE} && \
+         docker push ${TAG_TO_USE}"
