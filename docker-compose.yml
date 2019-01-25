@@ -1,19 +1,22 @@
 ---
-version: "3.7"
+version: "2.4"
 services:
+  base:
+    build:
+      context: .
+      dockerfile: base.Dockerfile
   unit-tests:
-    image: graze/bats
+    extends: base
     environment:
       - DOCKER_IMAGE_UNDER_TEST
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${DOCKER_BIN_PATH}:/usr/bin/docker
       - ${HOST_PWD?Please specify the app directory from the host.}:/app
     working_dir: /app
     command:
       - /app/tests
   push-to-docker-hub:
-    image: alpine
+    extends: base
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${HOST_PWD?Please specify the app directory from the host.}:/app
