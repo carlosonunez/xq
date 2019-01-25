@@ -1,0 +1,5 @@
+.travis
+.env
+!.env.example
+!.env.enc
+DS_Store
