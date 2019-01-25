@@ -25,5 +25,7 @@ services:
       - sh
       - "-c"
       - "docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD} && \
-         docker tag ${DOCKER_IMAGE_TO_DEPLOY} ${TAG_TO_USE} && \
-         docker push ${TAG_TO_USE}"
+         docker tag ${DOCKER_IMAGE_TO_DEPLOY} ${TAG_TO_USE}:${GIT_SHA?Please provide a Git commit SHA} && \
+         docker push ${TAG_TO_USE}:${GIT_SHA} && \
+         docker tag ${DOCKER_IMAGE_TO_DEPLOY} ${TAG_TO_USE}:latest && \
+         docker push ${TAG_TO_USE}:latest"
