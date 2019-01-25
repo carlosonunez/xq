@@ -12,8 +12,8 @@ test:
 	DOCKER_IMAGE_UNDER_TEST=$(LOCAL_DOCKER_IMAGE_NAME) \
 	docker-compose run --rm unit-tests
 
-push: build
-push:
+deploy: build
+deploy:
 	HOST_PWD=$(PWD) \
 	DOCKER_IMAGE_TO_DEPLOY=$(LOCAL_DOCKER_IMAGE_NAME) \
 	docker-compose run --rm push-to-docker-hub
